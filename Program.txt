@@ -1,0 +1,106 @@
+// Assembly code for printing the desired display of 4x4 space invaders.
+// Author: 164870
+// Date: 02/05/17  
+
+//Assignments to registers. further detail in 'D)' in the report.
+
+          MOV 00 -> R0
+          MOV 01 -> R1
+	  MOV 80 -> R2
+          MOV 00000100 -> R3
+
+//loop01: responsible for resetting R6 back to default. Jumps straight to loop, which is where
+//        writing to the display commences.
+
+loop01:   MOV 00 -> R6             // Initialise R6 to 00.
+//        MOV pattern1 -> R5       // Move desired pattern to R5. However, emulator seems to only move the first 4 bits, leaving an incorrect display. I have therefore commented this out and used manual data values for the pattern.
+          MOV 01111100 -> R5       // Move desired bit pattern to display to R5.
+loop:     MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00. 
+          JMPEQ loop, R4           // If R4 is equal to 00, go to 'loop'.
+	  
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 11010110 -> R5       // Move desired bit pattern to display to R5.
+loop2:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00.
+          JMPEQ loop2, R4          // If R4 is equal to 00, go to 'loop2'.
+	  
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 11111110 -> R5       // Move desired bit pattern to display to R5.
+loop3:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.       
+
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00. 
+          JMPEQ loop3, R4          // If R4 is equal to 00, go to 'loop3'.
+	  
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 00111000 -> R5       // Move desired bit pattern to display to R5.
+loop4:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          JMPEQ halt, R2           // If R2 is equal to 00, go to halt. Else carry on.
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00. 
+          JMPEQ loop4, R4          // If R4 is equal to 00, go to 'loop4'.
+	  
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 01010100 -> R5       // Move desired bit pattern to display to R5.
+loop5:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00. 
+          JMPEQ loop5, R4          // If R4 is equal to 00, go to 'loop5'.
+	  
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 10000010 -> R5       // Move desired bit pattern to display to R5.
+loop6:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00. 
+          JMPEQ loop6, R4          // If R4 is equal to 00, go to 'loop6'
+
+          MOV 00 -> R6             // Initialise R6 to 00.
+          MOV 00000000 -> R5       // Move desired bit pattern to display to R5.
+loop7:    MOV R5 -> [R2]           // Move desired bit pattern from R5 to location stored in R2.
+          
+          ADDI R6, R1 -> R6        // Increment R6 to the next row.
+          ADDI R2, R1 -> R2        // Increment R2 to next location to write to.
+          
+          AND R6, R3 -> R4         // If R6 AND R3 both equal 04, store 01 in R4. Else store 00.
+          JMPEQ loop7, R4          // If R4 is equal to 00, go to 'loop7'.
+	  JMP loop01               // Else, go to 'loop01'.
+
+halt: HALT                         //When R2 is equal to 00, go here and finish.
+
+
+// values for each row of the display are provided below:
+// On attempt of using these data values, Only have of 
+// 8bit pattern would be displayed. This made no logical
+// sense, as location 70 (or pattern relative location)
+// Stored the same pattern as the one I'm using in the 
+// code. Because of this, I am using the binary sequence
+// of each pattern in the source code. 
+
+pattern1: DATA 01111100
+pattern2: DATA 11010110
+pattern3: DATA 11111110
+pattern4: DATA 00111000
+pattern5: DATA 01010100
+pattern6: DATA 10000010
+pattern7: DATA 00000000
+
